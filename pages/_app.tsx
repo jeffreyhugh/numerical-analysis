@@ -1,13 +1,8 @@
 import { MDXProvider } from '@mdx-js/react';
-import {
-  createBrowserSupabaseClient,
-  Session,
-} from '@supabase/auth-helpers-nextjs';
-import { SessionContextProvider } from '@supabase/auth-helpers-react';
 import { AppProps } from 'next/app';
 import Link from 'next/link';
 import { ThemeProvider, useTheme } from 'next-themes';
-import { ReactNode, useState } from 'react';
+import { ReactNode } from 'react';
 import toast, { ToastBar, Toaster } from 'react-hot-toast';
 import { TbX } from 'react-icons/tb';
 
@@ -26,10 +21,7 @@ import { dark, light } from '@/constant/colors';
  * ? `Layout` component is called in every page using `np` snippets. If you have consistent layout across all page, you can add it here too
  */
 
-function MyApp({
-  Component,
-  pageProps,
-}: AppProps<{ initialSession: Session }>) {
+function MyApp({ Component, pageProps }: AppProps) {
   const { theme } = useTheme();
 
   const components = {
@@ -63,63 +55,54 @@ function MyApp({
     h4: H4,
   };
 
-  // !STARTERCONF consider using TypeScript for this
-  // https://supabase.com/docs/reference/javascript/typescript-support
-  const [supabaseClient] = useState(() => createBrowserSupabaseClient());
-
   return (
-    <SessionContextProvider
-      supabaseClient={supabaseClient}
-      initialSession={pageProps?.initialSession}
-    >
-      <ThemeProvider>
-        <MDXProvider components={components}>
-          <Toaster
-            toastOptions={{
-              style: {
-                borderRadius: 'var(--rounded-btn, 0.5rem)',
-                backgroundColor: 'hsl(var(--n) / 1)',
-                color: 'hsl(var(--nc) / 1)',
+    <ThemeProvider>
+      <MDXProvider components={components}>
+        <Toaster
+          toastOptions={{
+            style: {
+              borderRadius: 'var(--rounded-btn, 0.5rem)',
+              backgroundColor: 'hsl(var(--n) / 1)',
+              color: 'hsl(var(--nc) / 1)',
+            },
+            success: {
+              iconTheme: {
+                primary: theme === 'light' ? light.success : dark.success,
+                secondary:
+                  theme === 'light' ? light['base-100'] : dark['base-100'],
               },
-              success: {
-                iconTheme: {
-                  primary: theme === 'light' ? light.success : dark.success,
-                  secondary:
-                    theme === 'light' ? light['base-100'] : dark['base-100'],
-                },
+            },
+            error: {
+              iconTheme: {
+                primary: theme === 'light' ? light.error : dark.error,
+                secondary:
+                  theme === 'light' ? light['base-100'] : dark['base-100'],
               },
-              error: {
-                iconTheme: {
-                  primary: theme === 'light' ? light.error : dark.error,
-                  secondary:
-                    theme === 'light' ? light['base-100'] : dark['base-100'],
-                },
-              },
-            }}
-          >
-            {(t) => (
-              <ToastBar toast={t}>
-                {({ icon, message }) => (
-                  <>
-                    {icon}
-                    {message}
-                    {t.type !== 'loading' && (
-                      <button
-                        className='btn btn-ghost btn-xs btn-circle m-0 p-0'
-                        onClick={() => toast.dismiss(t.id)}
-                      >
-                        <TbX />
-                      </button>
-                    )}
-                  </>
-                )}
-              </ToastBar>
-            )}
-          </Toaster>
-          <Component {...pageProps} className='bg-base-100' />
-        </MDXProvider>
-      </ThemeProvider>
-    </SessionContextProvider>
+            },
+          }}
+        >
+          {(t) => (
+            <ToastBar toast={t}>
+              {({ icon, message }) => (
+                <>
+                  {icon}
+                  {message}
+                  {t.type !== 'loading' && (
+                    <button
+                      className='btn-ghost btn-xs btn-circle btn m-0 p-0'
+                      onClick={() => toast.dismiss(t.id)}
+                    >
+                      <TbX />
+                    </button>
+                  )}
+                </>
+              )}
+            </ToastBar>
+          )}
+        </Toaster>
+        <Component {...pageProps} className='bg-base-100' />
+      </MDXProvider>
+    </ThemeProvider>
   );
 }
 

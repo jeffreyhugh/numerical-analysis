@@ -44,7 +44,7 @@ export default function Header() {
             ))}
           </ul>
         </div>
-        <Link className='btn btn-ghost normal-case' href='/'>
+        <Link className='btn-ghost btn normal-case' href='/'>
           <SmallLogo />
           <div className='divider divider-horizontal hidden md:flex' />
           <span className='hidden md:inline'>Jeffrey Hugh</span>

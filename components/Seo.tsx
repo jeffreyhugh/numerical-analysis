@@ -5,11 +5,11 @@ import { openGraph } from '@/lib/helper';
 
 // !STARTERCONF Change these default meta
 const defaultMeta = {
-  title: 'Starter | Jeffrey Hugh',
-  siteName: 'Starter | Jeffrey Hugh',
-  description: 'Template with Next.js, TypeScript, DaisyUI, and more',
+  title: 'Numerical Analysis',
+  siteName: 'Numerical Analysis',
+  description: 'Visualization for several methods of numerical analysis',
   /** Without additional '/' on the end, e.g. https://theodorusclarence.com */
-  url: 'https://jh.ms',
+  url: 'https://numerical-analysis.jh.ms',
   type: 'website',
   robots: 'follow, index',
   /**

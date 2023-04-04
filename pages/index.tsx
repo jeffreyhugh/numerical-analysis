@@ -7,10 +7,6 @@ import Layout from '@/components/layout/Layout';
 import { BigLogo } from '@/components/Logo';
 import Seo from '@/components/Seo';
 
-// !STARTERCONF -> Select !STARTERCONF and CMD + SHIFT + F
-// Before you begin editing, follow all comments with `STARTERCONF`,
-// to customize the default configuration.
-
 export default function HomePage() {
   return (
     <Layout>
