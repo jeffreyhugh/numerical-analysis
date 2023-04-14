@@ -6,6 +6,8 @@ import { InlineMath } from 'react-katex';
 import clsxm from '@/lib/clsxm';
 import { bisection } from '@/lib/math/bisection';
 import { fpi } from '@/lib/math/fpi';
+import { newton } from '@/lib/math/newton';
+import { secant } from '@/lib/math/secant';
 import { wa_derivative } from '@/lib/math/wa_derivative';
 import { wa_eval } from '@/lib/math/wa_eval';
 
@@ -63,6 +65,31 @@ export default function Page() {
       });
   };
 
+  const newton_f = 'e^x + sin(x) - 4';
+  const newton_x0 = 1;
+  const newton_tolerance = 0.5 * 10 ** -6;
+
+  const calc_newton = () => {
+    setIsLoading(true);
+    newton(newton_f, newton_x0, newton_tolerance)
+      .then((res) => console.log(res))
+      .catch((e) => console.error(e))
+      .finally(() => setIsLoading(false));
+  };
+
+  const secant_f = 'x^3 - 2x - 2';
+  const secant_x0 = 1;
+  const secant_x1 = 2;
+  const secant_tolerance = 0.5 * 10 ** -6;
+
+  const calc_secant = () => {
+    setIsLoading(true);
+    secant(secant_f, secant_x0, secant_x1, secant_tolerance)
+      .then((res) => console.log(res))
+      .catch((e) => console.error(e))
+      .finally(() => setIsLoading(false));
+  };
+
   return (
     <Layout>
       <Seo templateTitle='Playground' />
@@ -73,7 +100,7 @@ export default function Page() {
             <Breadcrumbs />
             <h1 className='text-4xl font-bold'>Yuh</h1>
             <div className='mt-6'>
-              <div className='flex gap-2'>
+              <div className='flex flex-wrap gap-6'>
                 <div>
                   <div>
                     <InlineMath math={bisection_f} />
@@ -90,7 +117,7 @@ export default function Page() {
                     Bisection Method
                   </button>
                 </div>
-                <div className='divider divider-horizontal' />
+
                 <div>
                   <div>
                     <InlineMath math={fpi_f} />
@@ -106,7 +133,7 @@ export default function Page() {
                     Fixed Point Iteration
                   </button>
                 </div>
-                <div className='divider divider-horizontal' />
+
                 <div>
                   <div>
                     <InlineMath math={derivative_f} />
@@ -119,6 +146,39 @@ export default function Page() {
                     onClick={test_derivative}
                   >
                     Test Derivative
+                  </button>
+                </div>
+
+                <div>
+                  <div>
+                    <InlineMath math={newton_f} />
+                  </div>
+                  <div>x0 = {newton_x0}</div>
+                  <div>tolerance = {newton_tolerance}</div>
+                  <button
+                    className={clsxm('btn mt-4', isLoading && 'loading')}
+                    disabled={isLoading}
+                    type='button'
+                    onClick={calc_newton}
+                  >
+                    Newton Iteration
+                  </button>
+                </div>
+
+                <div>
+                  <div>
+                    <InlineMath math={secant_f} />
+                  </div>
+                  <div>x0 = {secant_x0}</div>
+                  <div>x1 = {secant_x1}</div>
+                  <div>tolerance = {secant_tolerance}</div>
+                  <button
+                    className={clsxm('btn mt-4', isLoading && 'loading')}
+                    disabled={isLoading}
+                    type='button'
+                    onClick={calc_secant}
+                  >
+                    Secant Method
                   </button>
                 </div>
               </div>
