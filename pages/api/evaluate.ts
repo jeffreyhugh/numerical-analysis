@@ -28,12 +28,15 @@ const handlePOST = async (
   let rangeString = '';
 
   if (Array.isArray(body.values)) {
-    rangeString = `{${body.values.join(', ')}}`;
+    rangeString = `{${body.values.join(',')}}`;
   } else {
-    rangeString = `Range[${body.values.min}, ${body.values.max}]`;
+    rangeString = `Range[${body.values.min},${body.values.max}]`;
   }
 
-  const queryString = `${body.func} where x = ${rangeString}`;
+  const queryString = `N[Map[${body.func.replaceAll(
+    'x',
+    '#'
+  )}&,${rangeString}]]`;
 
   const result = (await wa.getFull(
     queryString
@@ -41,7 +44,7 @@ const handlePOST = async (
 
   if (result.success) {
     if (result.pods) {
-      const answerPods = result.pods.filter((pod) => pod.id == 'Result');
+      const answerPods = result.pods.filter((pod) => pod.id === 'Result');
       if (Array.isArray(answerPods)) {
         const answerPod = answerPods[0];
         if (Array.isArray(answerPod.subpods)) {
