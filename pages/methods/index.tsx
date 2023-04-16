@@ -3,7 +3,7 @@ import * as React from 'react';
 import { Breadcrumbs } from '@/components/layout/Breadcrumbs';
 import Layout from '@/components/layout/Layout';
 import FunctionKatex from '@/components/methods/FunctionKatex';
-import MethodModal from '@/components/methods/modal';
+import MethodModal from '@/components/methods/MethodModal';
 import Seo from '@/components/Seo';
 
 export default function Page() {

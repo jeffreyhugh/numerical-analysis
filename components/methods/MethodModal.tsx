@@ -4,9 +4,9 @@ export default function MethodModal() {
   const [showModal, setShowModal] = React.useState(false);
 
   // !Only for testing modal
-  React.useEffect(() => {
-    localStorage.removeItem('visited');
-  }, []);
+  // React.useEffect(() => {
+  //   localStorage.removeItem('visited');
+  // }, []);
 
   React.useEffect(() => {
     const visited = localStorage.getItem('visited');
