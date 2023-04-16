@@ -57,17 +57,17 @@ module.exports = {
       // !STARTERCONF update colors
       {
         light: {
-          primary: '#3dcea0',
-          secondary: '#21936e',
+          primary: '#816ce0',
+          secondary: '#4b2193',
           accent: '#9e9e9e',
-          neutral: '#0c1110',
-          'base-100': '#cae2db',
-          info: '#37b3d2',
+          neutral: '#2A1E38',
+          'base-100': '#dedaed',
+          info: '#ae37d2',
           success: '#36d399',
           warning: '#eebe44',
           error: '#db2b39',
-          light: '#cae2db',
-          dark: '#0c1110',
+          light: '#c5bfe3',
+          dark: '#2A1E38',
 
           '--rounded-box': '0.25rem',
           '--rounded-btn': '0.125rem',
@@ -80,17 +80,17 @@ module.exports = {
       },
       {
         dark: {
-          primary: '#3dcea0',
-          secondary: '#21936e',
+          primary: '#816ce0',
+          secondary: '#4b2193',
           accent: '#9e9e9e',
-          neutral: '#cae2db',
-          'base-100': '#0c1110',
+          neutral: '#dedaed',
+          'base-100': '#2A1E38',
           info: '#37b3d2',
           success: '#36d399',
           warning: '#eebe44',
           error: '#db2b39',
-          light: '#cae2db',
-          dark: '#0c1110',
+          light: '#c5bfe3',
+          dark: '#2A1E38',
 
           '--rounded-box': '0.25rem',
           '--rounded-btn': '0.125rem',
