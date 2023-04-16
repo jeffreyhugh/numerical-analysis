@@ -26,7 +26,7 @@ export default function HomePage() {
                   </h3>
                   <div className='btn-group btn-group-vertical mt-6'>
                     {/* Add methods page */}
-                    <Link className='btn' href='/'>
+                    <Link className='btn' href='/methods'>
                       Explore Methods
                     </Link>
                     {/* Add compare page */}
