@@ -34,4 +34,4 @@ const newton_tolerance_ok = (
   last: number,
   n: number,
   tolerance: number
-) => n <= 20 && Math.abs(current - last) < tolerance;
+) => n > 30 && Math.abs(current - last) < tolerance;

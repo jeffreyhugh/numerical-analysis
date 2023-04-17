@@ -35,15 +35,17 @@ export const secant = async (
     }
     const [fLast, fMiddle] = res;
 
-    const resFinal = await wa_eval(
-      `0x + ${middle} - \\frac{${fMiddle} * (${middle} - ${last})}{${fMiddle} - ${fLast}}`,
-      [0]
-    );
-    if (resFinal.length === 0) {
-      throw 'WolframAlpha API error; check the console';
-    }
+    current = middle + (fMiddle * (middle - last)) / (fMiddle - fLast);
 
-    [current] = resFinal;
+    // const resFinal = await wa_eval(
+    //   `0x + ${middle} - \\frac{${fMiddle} * (${middle} - ${last})}{${fMiddle} - ${fLast}}`,
+    //   [0]
+    // );
+    // if (resFinal.length === 0) {
+    //   throw 'WolframAlpha API error; check the console';
+    // }
+
+    // [current] = resFinal;
 
     n += 1;
   }
@@ -59,4 +61,4 @@ const secant_tolerance_ok = (
   last: number,
   n: number,
   tolerance: number
-) => n <= 15 && Math.abs(current - last) < tolerance;
+) => n > 15 && Math.abs(current - last) < tolerance;

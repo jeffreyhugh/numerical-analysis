@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { ReactElement } from 'react';
 import { TbMenu2 } from 'react-icons/tb';
 
 import clsxm from '@/lib/clsxm';
@@ -6,18 +7,23 @@ import clsxm from '@/lib/clsxm';
 import { SmallLogo } from '@/components/Logo';
 import ThemeChanger from '@/components/ThemeChanger';
 
+type HeaderLink = {
+  children: ReactElement | string;
+  href: string;
+  className?: string;
+};
+
 export default function Header() {
   // children can be a string or JSX
   // className can change the button type
-  const headerLinks = [
+  const headerLinks: HeaderLink[] = [
     {
-      className: 'btn-primary',
-      children: <p className='font-black'>Features</p>,
-      href: '/features',
+      children: 'Explore',
+      href: '/methods',
     },
     {
-      children: 'Forms',
-      href: '/features/forms',
+      children: 'Compare',
+      href: '/compare',
     },
   ];
 
@@ -47,7 +53,7 @@ export default function Header() {
         <Link className='btn-ghost btn normal-case' href='/'>
           <SmallLogo />
           <div className='divider divider-horizontal hidden md:flex' />
-          <span className='hidden md:inline'>Jeffrey Hugh</span>
+          <span className='hidden md:inline'>Numerical Analysis</span>
         </Link>
         <div className='flex gap-2'>
           <div className='hidden gap-2 md:flex'>

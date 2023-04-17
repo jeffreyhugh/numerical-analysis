@@ -5,6 +5,7 @@ import { InlineMath } from 'react-katex';
 
 import clsxm from '@/lib/clsxm';
 import { bisection } from '@/lib/math/bisection';
+import { falsePosition } from '@/lib/math/falsePosition';
 import { fpi } from '@/lib/math/fpi';
 import { newton } from '@/lib/math/newton';
 import { secant } from '@/lib/math/secant';
@@ -85,6 +86,19 @@ export default function Page() {
   const calc_secant = () => {
     setIsLoading(true);
     secant(secant_f, secant_x0, secant_x1, secant_tolerance)
+      .then((res) => console.log(res))
+      .catch((e) => console.error(e))
+      .finally(() => setIsLoading(false));
+  };
+
+  const fp_f = 'x^3 - 2x - 2';
+  const fp_a = 1;
+  const fp_b = 2;
+  const fp_tolerance = 0.5 * 10 ** -6;
+
+  const calc_fp = () => {
+    setIsLoading(true);
+    falsePosition(fp_f, fp_a, fp_b, fp_tolerance)
       .then((res) => console.log(res))
       .catch((e) => console.error(e))
       .finally(() => setIsLoading(false));
@@ -179,6 +193,23 @@ export default function Page() {
                     onClick={calc_secant}
                   >
                     Secant Method
+                  </button>
+                </div>
+
+                <div>
+                  <div>
+                    <InlineMath math={fp_f} />
+                  </div>
+                  <div>a = {fp_a}</div>
+                  <div>b = {fp_b}</div>
+                  <div>tolerance = {fp_tolerance}</div>
+                  <button
+                    className={clsxm('btn mt-4', isLoading && 'loading')}
+                    disabled={isLoading}
+                    type='button'
+                    onClick={calc_fp}
+                  >
+                    False Position
                   </button>
                 </div>
               </div>
