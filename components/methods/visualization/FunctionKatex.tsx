@@ -8,11 +8,12 @@ export default function FunctionKatex({
   functionInput: string;
 }) {
   return (
-    <div className='flex w-full max-w-sm flex-col justify-end'>
-      <div className='flex w-full max-w-sm items-center justify-center rounded-sm border border-neutral text-2xl'>
-        <div className='flex flex-row py-10'>
+    <div className='flex w-full max-w-sm flex-col justify-end gap-1'>
+      <h2>Evaluating:</h2>
+      <div className='flex w-full max-w-sm items-center justify-center rounded-sm border border-neutral text-xl'>
+        <div className='flex flex-row py-5'>
           {functionInput == '' ? (
-            'Enter an equation'
+            'No equation entered'
           ) : (
             <InlineMath math={convertToLatex(functionInput)} />
           )}
