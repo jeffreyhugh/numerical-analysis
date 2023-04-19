@@ -1,13 +1,32 @@
 import { wa_derivative } from '@/lib/math/wa_derivative';
 import { wa_eval } from '@/lib/math/wa_eval';
 
-export const fpi = async (f: string, x0: number, tolerance: number) => {
-  let last = x0;
-  const res = await wa_eval(f, [last]);
-  if (res.length === 0) {
-    throw 'WolframAlpha API error; check the console';
-  }
-  let [current] = res;
+export type FPIReturn = {
+  input: {
+    f: string;
+    df: string;
+    x0: number;
+    tolerance: number;
+  };
+  output: {
+    current: number;
+    last: number;
+    n: number;
+    tolerance: number;
+  }[];
+};
+
+export const fpi = async (
+  f: string,
+  x0: number,
+  tolerance: number
+): Promise<FPIReturn> => {
+  let last = Infinity;
+  // const res = await wa_eval(f, [last]);
+  // if (res.length === 0) {
+  //   throw 'WolframAlpha API error; check the console';
+  // }
+  let current = x0;
   // number of iterations
   let n = 0;
 
@@ -17,7 +36,16 @@ export const fpi = async (f: string, x0: number, tolerance: number) => {
     throw 'Function does not converge at root guess';
   }
 
+  const outputData = [] as FPIReturn['output'];
+
   while (!fpi_tolerance_ok(current, last, n, tolerance)) {
+    outputData.push({
+      current,
+      last,
+      n,
+      tolerance: Math.abs(current - last),
+    });
+
     last = current;
 
     const res = await wa_eval(f, [last]);
@@ -30,9 +58,21 @@ export const fpi = async (f: string, x0: number, tolerance: number) => {
     n += 1;
   }
 
+  outputData.push({
+    current,
+    last,
+    n,
+    tolerance: Math.abs(current - last),
+  });
+
   return {
-    result: current,
-    iterations: n,
+    input: {
+      f,
+      df,
+      x0,
+      tolerance,
+    },
+    output: outputData,
   };
 };
 
@@ -41,4 +81,4 @@ const fpi_tolerance_ok = (
   last: number,
   n: number,
   tolerance: number
-) => n > 30 && Math.abs(current - last) < tolerance;
+) => n > 30 || Math.abs(current - last) < tolerance;

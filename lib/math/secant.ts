@@ -1,18 +1,36 @@
 import { wa_eval } from '@/lib/math/wa_eval';
 
+export type SecantReturn = {
+  input: {
+    f: string;
+    x0: number;
+    x1: number;
+    tolerance: number;
+  };
+  output: {
+    current: number;
+    middle: number;
+    last: number;
+    n: number;
+    tolerance: number;
+    f_middle: number;
+    f_last: number;
+  }[];
+};
+
 export const secant = async (
   f: string,
   x0: number,
   x1: number,
   tolerance: number
-) => {
+): Promise<SecantReturn> => {
   let last = x0;
   let middle = x1;
   const res = await wa_eval(f, [last, middle]);
   if (res.length === 0) {
     throw 'WolframAlpha API error; check the console';
   }
-  const [fLast, fMiddle] = res;
+  let [fLast, fMiddle] = res;
 
   const resFinal = await wa_eval(
     `0x + ${middle} - \\frac{${fMiddle} * (${middle} - ${last})}{${fMiddle} - ${fLast}}`,
@@ -25,7 +43,19 @@ export const secant = async (
   // number of iterations
   let n = 0;
 
+  const outputData = [] as SecantReturn['output'];
+
   while (!secant_tolerance_ok(current, middle, n, tolerance)) {
+    outputData.push({
+      current,
+      middle,
+      last,
+      n,
+      tolerance: Math.abs(current - last),
+      f_middle: fMiddle,
+      f_last: fLast,
+    });
+
     last = middle;
     middle = current;
 
@@ -33,26 +63,31 @@ export const secant = async (
     if (res.length === 0) {
       throw 'WolframAlpha API error; check the console';
     }
-    const [fLast, fMiddle] = res;
+    [fLast, fMiddle] = res;
 
     current = middle + (fMiddle * (middle - last)) / (fMiddle - fLast);
-
-    // const resFinal = await wa_eval(
-    //   `0x + ${middle} - \\frac{${fMiddle} * (${middle} - ${last})}{${fMiddle} - ${fLast}}`,
-    //   [0]
-    // );
-    // if (resFinal.length === 0) {
-    //   throw 'WolframAlpha API error; check the console';
-    // }
-
-    // [current] = resFinal;
 
     n += 1;
   }
 
+  outputData.push({
+    current,
+    middle,
+    last,
+    n,
+    tolerance: Math.abs(current - last),
+    f_middle: fMiddle,
+    f_last: fLast,
+  });
+
   return {
-    result: current,
-    iterations: n,
+    input: {
+      f,
+      x0,
+      x1,
+      tolerance,
+    },
+    output: outputData,
   };
 };
 
@@ -61,4 +96,4 @@ const secant_tolerance_ok = (
   last: number,
   n: number,
   tolerance: number
-) => n > 15 && Math.abs(current - last) < tolerance;
+) => n > 15 || Math.abs(current - last) < tolerance;
