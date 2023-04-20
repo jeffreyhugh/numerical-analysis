@@ -2,19 +2,47 @@ import * as React from 'react';
 
 import { Breadcrumbs } from '@/components/layout/Breadcrumbs';
 import Layout from '@/components/layout/Layout';
-import Bisection from '@/components/methods/Bisection';
+import Bisection, {
+  graphData,
+  iterationData,
+} from '@/components/methods/Bisection';
 import FalsePosition from '@/components/methods/FalsePosition';
 import FixedPoint from '@/components/methods/FixedPoint';
 import Newton from '@/components/methods/Newton';
 import Secant from '@/components/methods/Secant';
+import FunctionInput from '@/components/methods/utils/FunctionInput';
+import SelectMethod from '@/components/methods/utils/SelectMethod';
+import Settings from '@/components/methods/utils/Settings';
 import FunctionKatex from '@/components/methods/visualization/FunctionKatex';
 import Graph from '@/components/methods/visualization/Graph';
 import MethodModal from '@/components/methods/visualization/MethodModal';
+import Stat from '@/components/methods/visualization/Stat';
 import Seo from '@/components/Seo';
 
 export default function Page() {
   const [selectedMethod, setSelectedMethod] = React.useState('bisection');
   const [functionInput, setFunctionInput] = React.useState('3*sin(x) - x^3');
+  const [graphData, setGraphData] = React.useState<graphData[] | null>(null);
+  const [graphLoading, setGraphLoading] = React.useState(false);
+  const [tolerance, setTolerance] = React.useState(0.0001);
+  const [iterationData, setIterationData] =
+    React.useState<iterationData | null>(null);
+
+  function handleTolerance(tolerance: number) {
+    setTolerance(tolerance);
+  }
+
+  function handleIterationData(data: iterationData) {
+    setIterationData(data);
+  }
+
+  function handleGraphData(data: graphData[] | null) {
+    setGraphData(data);
+  }
+
+  function handleGraphLoading(loading: boolean) {
+    setGraphLoading(loading);
+  }
 
   function handleFunctionInput(e: React.ChangeEvent<HTMLInputElement>) {
     setFunctionInput(e.target.value);
@@ -27,7 +55,6 @@ export default function Page() {
   return (
     <Layout>
       <Seo templateTitle='' />
-
       <main className='flex flex-grow'>
         <section className='flex flex-grow'>
           <div className='layout min-h-c'>
@@ -35,39 +62,40 @@ export default function Page() {
             <MethodModal />
             <div className='flex flex-col justify-between gap-5 md:flex-row'>
               <div className='flex w-full max-w-xs flex-col gap-5'>
-                <div className='form-control w-full max-w-xs'>
-                  <label className='label'>
-                    <span className='label-text'>Enter an equation</span>
-                  </label>
-                  <input
-                    type='text'
-                    value={functionInput}
-                    onChange={handleFunctionInput}
-                    className='w-fill input-bordered input max-w-xs'
+                <FunctionInput
+                  functionInput={functionInput}
+                  handleFunctionInput={handleFunctionInput}
+                />
+                <div className='w-fill flex gap-[1.85rem]'>
+                  <SelectMethod
+                    selectedMethod={selectedMethod}
+                    handleMethodSelect={handleMethodSelect}
                   />
+                  <div className='flex items-center'>
+                    <Settings handleTolerance={handleTolerance} />
+                  </div>
                 </div>
-                <div className='form control w-fill flex max-w-xs flex-col'>
-                  <select
-                    className='select-bordered select'
-                    value={selectedMethod}
-                    onChange={handleMethodSelect}
-                  >
-                    <option value='bisection'>Bisection</option>
-                    <option value='fixed-point'>Fixed-Point Iteration</option>
-                    <option value='newton'>Newton</option>
-                    <option value='secant'>Secant</option>
-                    <option value='false-position'>False Position</option>
-                  </select>
-                </div>
-                {selectedMethod === 'bisection' && <Bisection />}
+                {selectedMethod === 'bisection' && (
+                  <Bisection
+                    tolerance={tolerance}
+                    functionInput={functionInput}
+                    handleGraphData={handleGraphData}
+                    handleGraphLoading={handleGraphLoading}
+                    handleIterationData={handleIterationData}
+                    graphLoading={graphLoading}
+                  />
+                )}
                 {selectedMethod === 'fixed-point' && <FixedPoint />}
                 {selectedMethod === 'newton' && <Newton />}
                 {selectedMethod === 'secant' && <Secant />}
                 {selectedMethod === 'false-position' && <FalsePosition />}
               </div>
               <div className='flex w-full flex-col items-center justify-center gap-5'>
-                <FunctionKatex functionInput={functionInput} />
-                <Graph />
+                <div className='flex w-full justify-between px-10 max-[1200px]:flex-col'>
+                  <FunctionKatex functionInput={functionInput} />
+                  {iterationData && <Stat iterationData={iterationData} />}
+                </div>
+                <Graph graphData={graphData} />
               </div>
             </div>
           </div>
