@@ -13,6 +13,7 @@ export type NewtonReturn = {
     last: number;
     n: number;
     tolerance: number;
+    fx: number;
   }[];
 };
 
@@ -27,6 +28,11 @@ export const newton = async (
   let current = x0;
   // number of iterations
   let n = 0;
+  let res = await wa_eval(f, [current]);
+  if (res.length === 0) {
+    throw 'WolframAlpha API error; check the console';
+  }
+  let [fx] = res;
 
   const outputData = [] as NewtonReturn['output'];
 
@@ -36,16 +42,23 @@ export const newton = async (
       last,
       n,
       tolerance: Math.abs(current - last),
+      fx,
     });
 
     last = current;
 
-    const res = await wa_eval(`${last} - \\frac{${f}}{${df}}`, [last]);
+    res = await wa_eval(`${last} - \\frac{${f}}{${df}}`, [last]);
     if (res.length === 0) {
       throw 'WolframAlpha API error; check the console';
     }
 
     [current] = res;
+
+    res = await wa_eval(f, [current]);
+    if (res.length === 0) {
+      throw 'WolframAlpha API error; check the console';
+    }
+    [fx] = res;
 
     n += 1;
   }
