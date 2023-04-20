@@ -35,6 +35,7 @@ export const bisection = async (
 
   while (!bisection_tolerance_ok(a, b, n, tolerance)) {
     c = (a + b) / 2;
+    const dataC = c;
 
     const res = await wa_eval(f, [a, b, c]);
     if (res.length === 0) {
@@ -54,7 +55,7 @@ export const bisection = async (
     outputData.push({
       a,
       b,
-      c,
+      c: dataC,
       n,
       tolerance: (b - a) / 2 ** (n + 1),
       f_a,
