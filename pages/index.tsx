@@ -25,17 +25,11 @@ export default function HomePage() {
                     Fixed-Point Iteration, and more.
                   </h3>
                   <div className='btn-group btn-group-vertical mt-6'>
-                    {/* Add methods page */}
                     <Link className='btn' href='/methods'>
+                      Run Methods
+                    </Link>
+                    <Link className='btn' href='/methods/explore'>
                       Explore Methods
-                    </Link>
-                    {/* Add compare page */}
-                    <Link className='btn' href='/'>
-                      Compare Methods
-                    </Link>
-                    {/* Remove in prod */}
-                    <Link className='btn' href='/playground'>
-                      Playground
                     </Link>
                   </div>
                 </div>

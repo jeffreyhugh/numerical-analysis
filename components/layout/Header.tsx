@@ -18,15 +18,14 @@ export default function Header() {
   // className can change the button type
   const headerLinks: HeaderLink[] = [
     {
-      children: 'Explore',
+      children: 'Run Methods',
       href: '/methods',
     },
     {
-      children: 'Compare',
-      href: '/compare',
+      children: 'Explore',
+      href: '/methods/explore',
     },
   ];
-
   return (
     <div className='navbar sticky top-0 z-50 border-b border-b-neutral/10 bg-white/10 p-4 backdrop-blur-md'>
       <div className='flex w-full justify-between'>
