@@ -8,7 +8,8 @@ export default function Footer() {
           &copy; {new Date().getFullYear()} by{' '}
           <Link className='link' href='https://jh.ms'>
             Jeffrey Hugh
-          </Link>
+          </Link>{' '}
+          and Aryan Swaminath
         </p>
       </div>
     </footer>
