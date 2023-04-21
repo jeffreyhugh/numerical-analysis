@@ -136,7 +136,7 @@ export default function Page() {
                     />
                   )}
                 </div>
-                <Graph graphData={graphData} />
+                <Graph graphData={graphData} isLoading={graphLoading} />
               </div>
             </div>
           </div>
