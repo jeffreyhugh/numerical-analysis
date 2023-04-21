@@ -60,7 +60,7 @@ export default function Page() {
           <div className='layout min-h-c'>
             <Breadcrumbs />
             <MethodModal />
-            <div className='flex flex-col justify-between gap-5 md:flex-row'>
+            <div className='flex flex-col items-center justify-between gap-5 md:flex-row'>
               <div className='flex w-full max-w-xs flex-col gap-5'>
                 <FunctionInput
                   functionInput={functionInput}
@@ -127,7 +127,7 @@ export default function Page() {
                 )}
               </div>
               <div className='flex w-full flex-col items-center justify-center gap-5'>
-                <div className='flex w-full justify-between px-10 max-[1200px]:flex-col'>
+                <div className='flex w-full justify-between px-10 max-[1200px]:flex-col max-[1200px]:items-center max-[1200px]:gap-10 '>
                   <FunctionKatex functionInput={functionInput} />
                   {iterationData && (
                     <Stat
