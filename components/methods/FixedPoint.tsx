@@ -3,11 +3,10 @@ import * as React from 'react';
 import { toast } from 'react-hot-toast';
 import { TbInfoCircle } from 'react-icons/tb';
 
-import { fpi, FPIReturn } from '@/lib/math/fpi';
+import { fpi2, FPI2Return } from '@/lib/math/fpi2';
 
 import { graphData, iterationData } from '@/components/methods/Bisection';
 import CalculateButton from '@/components/methods/utils/CalculateButton';
-import InitGuess from '@/components/methods/utils/InitGuess';
 export default function FixedPoint({
   functionInput,
   tolerance,
@@ -24,12 +23,16 @@ export default function FixedPoint({
   graphLoading: boolean;
 }) {
   const [initialGuess, setInitialGuess] = React.useState(0);
+  const [gFunction, setGFunction] = React.useState('');
   const [isLoading, setIsLoading] = React.useState(false);
 
-  function transformData(data: FPIReturn) {
-    const points: { x: number; y: number }[] = [];
+  function transformData(data: FPI2Return) {
+    const points: graphData[] = [];
     data.output.forEach((dataPoint) => {
-      points.push({ x: dataPoint.n, y: dataPoint.current });
+      points.push({
+        x: dataPoint.current,
+        y: dataPoint.fcurrent,
+      });
     });
     return points;
   }
@@ -44,20 +47,25 @@ export default function FixedPoint({
       toast.error('Please enter a valid tolerance');
       return;
     }
+    if (gFunction === '') {
+      toast.error('Please enter a valid function g(x)');
+      return;
+    }
+
     if (isNaN(initialGuess)) {
       toast.error('Please enter a valid initial guess');
     }
     if (functionInput === '') {
-      toast.error('Please enter a valid function');
+      toast.error('Please enter a valid function f(x)');
     }
     setIsLoading(true);
     handleGraphLoading(true);
     try {
-      const res = await fpi(functionInput, initialGuess, tolerance);
+      const res = await fpi2(functionInput, gFunction, initialGuess, tolerance);
       const cleanedData = transformData(res);
       handleGraphData(cleanedData);
       handleIterationData({
-        iterations: res.output.length - 1,
+        iterations: res.output.length,
         root: res.output[res.output.length - 1].current,
       });
     } catch (err) {
@@ -90,7 +98,24 @@ export default function FixedPoint({
             </div>
           </div>
         </div>
-        <InitGuess setInitialGuess={setInitialGuess} />
+        <div className='flex flex-col gap-2'>
+          <input
+            type='text'
+            placeholder='Function (g)'
+            className='input-bordered input input-md w-[75%] max-w-xs'
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              setGFunction(e.target.value)
+            }
+          />
+          <input
+            type='text'
+            placeholder='Initial guess (x0)'
+            className='input-bordered input input-md w-[75%] max-w-xs'
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              setInitialGuess(parseFloat(e.target.value))
+            }
+          />
+        </div>
       </div>
       <CalculateButton
         handleCalculate={handleCalculate}
