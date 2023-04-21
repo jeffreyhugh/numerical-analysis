@@ -126,7 +126,7 @@ export default function Page() {
         <section className='flex flex-grow'>
           <div className='layout min-h-c'>
             <Breadcrumbs />
-            <h1 className='text-4xl font-bold'>Yuh</h1>
+            <h1 className='text-4xl font-bold'>Playground</h1>
             <div className='mt-6'>
               <div className='flex flex-wrap gap-6'>
                 <div>
@@ -245,6 +245,14 @@ export default function Page() {
                     False Position
                   </button>
                 </div>
+
+                <button
+                  type='button'
+                  onClick={() => toast.error('error')}
+                  className='btn-primary btn'
+                >
+                  Error
+                </button>
               </div>
             </div>
           </div>

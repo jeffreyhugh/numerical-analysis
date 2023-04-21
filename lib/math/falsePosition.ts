@@ -44,6 +44,9 @@ export const falsePosition = async (
     }
 
     const [f_a, f_b] = res;
+    if (!f_a || !f_b) {
+      break;
+    }
 
     c = (b * f_a - a * f_b) / (f_a - f_b);
 
@@ -53,6 +56,10 @@ export const falsePosition = async (
     }
 
     const [f_c] = res;
+    if (!f_c) {
+      break;
+    }
+
     if (f_a * f_c < 0) {
       b = c;
     } else {

@@ -36,7 +36,9 @@ export const fpi = async (
     throw 'WolframAlpha API error; check the console';
   }
   const [convergence_test] = res;
-  if (Math.abs(convergence_test) >= 1) {
+  if (!convergence_test) {
+    throw 'Null value returned from WolframAlpha';
+  } else if (Math.abs(convergence_test) >= 1) {
     throw 'Function does not converge at root guess';
   }
 
@@ -58,16 +60,21 @@ export const fpi = async (
     }
 
     [current] = res;
+    if (!current) {
+      break;
+    }
 
     n += 1;
   }
 
-  outputData.push({
-    current,
-    last,
-    n,
-    tolerance: Math.abs(current - last),
-  });
+  if (current && last && n) {
+    outputData.push({
+      current,
+      last,
+      n,
+      tolerance: Math.abs(current - last),
+    });
+  }
 
   return {
     input: {

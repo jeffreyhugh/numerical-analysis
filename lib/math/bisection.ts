@@ -37,7 +37,9 @@ export const bisection = async (
   }
 
   const [ivt_a, ivt_b] = res;
-  if (ivt_a * ivt_b > 0) {
+  if (!ivt_a || !ivt_b) {
+    throw 'Null value returned from WolframAlpha';
+  } else if (ivt_a * ivt_b > 0) {
     throw 'IVT does not apply on this range';
   }
 
@@ -56,6 +58,9 @@ export const bisection = async (
     }
 
     const [f_a, f_b, f_c] = res;
+    if (!f_a || !f_b || !f_c) {
+      break;
+    }
 
     if (f_a * f_c < 0) {
       b = c;

@@ -13,7 +13,7 @@ export type FPI2Return = {
     current: number;
     last: number;
     n: number;
-    fcurrent: number;
+    fCurrent: number;
     tolerance: number;
   }[];
 };
@@ -31,7 +31,9 @@ export const fpi2 = async (
 
   const dg = await wa_derivative(g, 1);
   const [convergence_test] = await wa_eval(dg, [x0]);
-  if (Math.abs(convergence_test) >= 1) {
+  if (!convergence_test) {
+    throw 'Null value returned from WolframAlpha';
+  } else if (Math.abs(convergence_test) >= 1) {
     throw 'Function does not converge at root guess';
   }
 
@@ -39,7 +41,10 @@ export const fpi2 = async (
   if (res.length === 0) {
     throw 'WolframAlpha API error; check the console';
   }
-  let [fcurrent] = res;
+  let [fCurrent] = res;
+  if (!fCurrent) {
+    throw 'Null value returned from WolframAlpha';
+  }
 
   const outputData = [] as FPI2Return['output'];
 
@@ -49,7 +54,7 @@ export const fpi2 = async (
       last,
       n,
       tolerance: current - last,
-      fcurrent,
+      fCurrent,
     });
 
     last = current;
@@ -59,23 +64,31 @@ export const fpi2 = async (
     }
 
     [current] = res;
+    if (!current) {
+      break;
+    }
 
     res = await wa_eval(f, [current]);
     if (res.length === 0) {
       throw 'WolframAlpha API error; check the console';
     }
-    [fcurrent] = res;
+    [fCurrent] = res;
+    if (!fCurrent) {
+      break;
+    }
 
     n += 1;
   }
 
-  outputData.push({
-    current,
-    last,
-    n,
-    tolerance: current - last,
-    fcurrent,
-  });
+  if (current && last && n && fCurrent) {
+    outputData.push({
+      current,
+      last,
+      n,
+      tolerance: current - last,
+      fCurrent,
+    });
+  }
 
   return {
     input: {

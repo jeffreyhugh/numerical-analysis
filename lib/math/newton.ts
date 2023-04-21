@@ -33,6 +33,9 @@ export const newton = async (
     throw 'WolframAlpha API error; check the console';
   }
   let [fx] = res;
+  if (!fx) {
+    throw 'Null value returned from WolframAlpha';
+  }
 
   const outputData = [] as NewtonReturn['output'];
 
@@ -53,12 +56,18 @@ export const newton = async (
     }
 
     [current] = res;
+    if (!current) {
+      break;
+    }
 
     res = await wa_eval(f, [current]);
     if (res.length === 0) {
       throw 'WolframAlpha API error; check the console';
     }
     [fx] = res;
+    if (!fx) {
+      break;
+    }
 
     n += 1;
   }

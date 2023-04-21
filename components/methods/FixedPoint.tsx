@@ -31,7 +31,7 @@ export default function FixedPoint({
     data.output.forEach((dataPoint) => {
       points.push({
         x: dataPoint.current,
-        y: dataPoint.fcurrent,
+        y: dataPoint.fCurrent,
       });
     });
     return points;

@@ -57,21 +57,26 @@ export const secant = async (
       throw 'WolframAlpha API error; check the console';
     }
     [fLast, fMiddle] = res;
+    if (!fLast || !fMiddle) {
+      break;
+    }
 
     current = middle - (fMiddle * (middle - last)) / (fMiddle - fLast);
 
     n += 1;
   }
 
-  outputData.push({
-    current,
-    middle,
-    last,
-    n,
-    tolerance: Math.abs(current - last),
-    f_middle: fMiddle,
-    f_last: fLast,
-  });
+  if (current && middle && last && n && fMiddle && fLast) {
+    outputData.push({
+      current,
+      middle,
+      last,
+      n,
+      tolerance: Math.abs(current - last),
+      f_middle: fMiddle,
+      f_last: fLast,
+    });
+  }
 
   return {
     input: {
