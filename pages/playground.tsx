@@ -7,6 +7,7 @@ import clsxm from '@/lib/clsxm';
 import { bisection } from '@/lib/math/bisection';
 import { falsePosition } from '@/lib/math/falsePosition';
 import { fpi } from '@/lib/math/fpi';
+import { fpi2 } from '@/lib/math/fpi2';
 import { newton } from '@/lib/math/newton';
 import { secant } from '@/lib/math/secant';
 import { wa_derivative } from '@/lib/math/wa_derivative';
@@ -104,6 +105,19 @@ export default function Page() {
       .finally(() => setIsLoading(false));
   };
 
+  const fpi2_f = 'x^3 - 2x - 2';
+  const fpi2_g = '\\sqrt[3]{2x+2}';
+  const fpi2_x = 0.5;
+  const fpi2_tolerance = 0.5 * 10 ** -6;
+
+  const calc_fpi2 = () => {
+    setIsLoading(true);
+    fpi2(fpi2_f, fpi2_g, fpi2_x, fpi2_tolerance)
+      .then((res) => console.log(res))
+      .catch((e) => console.error(e))
+      .finally(() => setIsLoading(false));
+  };
+
   return (
     <Layout>
       <Seo templateTitle='Playground' />
@@ -145,6 +159,25 @@ export default function Page() {
                     onClick={calc_fpi}
                   >
                     Fixed Point Iteration
+                  </button>
+                </div>
+
+                <div>
+                  <div>
+                    <InlineMath math={fpi2_f} />
+                  </div>
+                  <div>
+                    <InlineMath math={fpi2_g} />
+                  </div>
+                  <div>x = {fpi2_x}</div>
+                  <div>tolerance = {fpi2_tolerance}</div>
+                  <button
+                    className={clsxm('btn mt-4', isLoading && 'loading')}
+                    disabled={isLoading}
+                    type='button'
+                    onClick={calc_fpi2}
+                  >
+                    Fixed Point Iteration 2
                   </button>
                 </div>
 

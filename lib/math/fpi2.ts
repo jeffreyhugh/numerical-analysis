@@ -1,10 +1,11 @@
 import { wa_derivative } from '@/lib/math/wa_derivative';
 import { wa_eval } from '@/lib/math/wa_eval';
 
-export type FPIReturn = {
+export type FPI2Return = {
   input: {
     f: string;
-    df: string;
+    g: string;
+    dg: string;
     x0: number;
     tolerance: number;
   };
@@ -12,52 +13,58 @@ export type FPIReturn = {
     current: number;
     last: number;
     n: number;
+    fcurrent: number;
     tolerance: number;
   }[];
 };
 
-export const fpi = async (
+export const fpi2 = async (
   f: string,
+  g: string,
   x0: number,
   tolerance: number
-): Promise<FPIReturn> => {
+) => {
   let last = Infinity;
-  // const res = await wa_eval(f, [last]);
-  // if (res.length === 0) {
-  //   throw 'WolframAlpha API error; check the console';
-  // }
   let current = x0;
   // number of iterations
   let n = 0;
 
-  const df = await wa_derivative(f, 1);
-  let res = await wa_eval(df, [x0]);
-  if (res.length === 0) {
-    throw 'WolframAlpha API error; check the console';
-  }
-  const [convergence_test] = res;
+  const dg = await wa_derivative(g, 1);
+  const [convergence_test] = await wa_eval(dg, [x0]);
   if (Math.abs(convergence_test) >= 1) {
     throw 'Function does not converge at root guess';
   }
 
-  const outputData = [] as FPIReturn['output'];
+  let res = await wa_eval(f, [current]);
+  if (res.length === 0) {
+    throw 'WolframAlpha API error; check the console';
+  }
+  let [fcurrent] = res;
 
-  while (!fpi_tolerance_ok(current, last, n, tolerance)) {
+  const outputData = [] as FPI2Return['output'];
+
+  while (!fpi2_tolerance_ok(current, last, n, tolerance)) {
     outputData.push({
       current,
       last,
       n,
-      tolerance: Math.abs(current - last),
+      tolerance: current - last,
+      fcurrent,
     });
 
     last = current;
-
-    res = await wa_eval(f, [last]);
+    res = await wa_eval(g, [last]);
     if (res.length === 0) {
       throw 'WolframAlpha API error; check the console';
     }
 
     [current] = res;
+
+    res = await wa_eval(f, [current]);
+    if (res.length === 0) {
+      throw 'WolframAlpha API error; check the console';
+    }
+    [fcurrent] = res;
 
     n += 1;
   }
@@ -66,13 +73,15 @@ export const fpi = async (
     current,
     last,
     n,
-    tolerance: Math.abs(current - last),
+    tolerance: current - last,
+    fcurrent,
   });
 
   return {
     input: {
       f,
-      df,
+      g,
+      dg,
       x0,
       tolerance,
     },
@@ -80,9 +89,9 @@ export const fpi = async (
   };
 };
 
-const fpi_tolerance_ok = (
+const fpi2_tolerance_ok = (
   current: number,
   last: number,
   n: number,
   tolerance: number
-) => n > 30 || Math.abs(current - last) < tolerance;
+) => n > 15 || Math.abs(current - last) < tolerance;
