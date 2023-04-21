@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import * as React from 'react';
 import { toast } from 'react-hot-toast';
 import { TbInfoCircle } from 'react-icons/tb';
@@ -66,13 +67,16 @@ export default function Newton({
 
   return (
     <div className='flex flex-col gap-2'>
-      <p className='text-sm'>
+      <div className='text-sm'>
         Newtons Method (Newton-Raphson Method) is an iterative root-finding
         technique that uses linear approximation and function derivatives to
         quickly converge to the root of a function. It is a widely-used and
         powerful method due to its fast convergence rate when an initial guess
-        is close to the actual root.
-      </p>
+        is close to the actual root.{' '}
+        <Link className='link' href='/methods/newton'>
+          learn more
+        </Link>
+      </div>
       <div className='flex flex-col gap-2'>
         <div className='flex flex-row gap-1'>
           <h4 className='h5'>Required Parameters</h4>

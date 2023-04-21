@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import * as React from 'react';
 import { toast } from 'react-hot-toast';
 import { TbInfoCircle } from 'react-icons/tb';
@@ -80,12 +81,15 @@ export default function Secant({
   }
   return (
     <div className='flex flex-col gap-2'>
-      <p className='text-sm'>
+      <div className='text-sm'>
         The Secant Method approximates the root of a function by drawing a
         secant line between two points and finding their intersection with the
         x-axis. The method is similar to Newtons Method but does not require the
-        calculation of derivatives, instead using two initial guesses.
-      </p>
+        calculation of derivatives, instead using two initial guesses.{' '}
+        <Link className='link' href='/methods/false-position'>
+          learn more
+        </Link>
+      </div>
       <div className='flex flex-col gap-2'>
         <div className='flex flex-row gap-1'>
           <h4 className='h5'>Required Parameters</h4>

@@ -1,0 +1,102 @@
+import Layout from '@/components/layout/Layout';
+import Seo from '@/components/Seo';
+import toast from 'react-hot-toast';
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs';
+import { Callout } from '@/components/mdx/Callout';
+import { SmallLogo } from '@/components/Logo';
+import { TbAlertTriangle, TbCheck, TbX } from 'react-icons/tb';
+
+# Secant Method
+
+The Secant method is a numerical root-finding technique used to approximate the roots of a continuous function. Similar to Newton's method, the Secant method is an iterative process, but it does not require the derivative of the function. Instead, it approximates the derivative using two initial guesses, making it suitable for functions where the derivative is difficult to obtain or computationally expensive to calculate. The Secant method converges faster than the Bisection method but slower than Newton's method.
+
+## Secant Method Algorithm
+
+The Secant method involves the following iterative process:
+
+1. Start with two initial guesses, $x_0$ and $x_1$, where $x_0 \ne x_1$.
+2. Approximate the function's derivative at $x_1$ using the secant line connecting the points $(x_0, f(x_0))$ and $(x_1, f(x_1))$. The slope of the secant line is given by:
+
+   $f'(x_1) \approx \frac{f(x_1) - f(x_0)}{x_1 - x_0}$
+
+3. Update the guess $x_2$ using the following formula:
+
+   $x_2 = x_1 - \frac{f(x_1)(x_1 - x_0)}{f(x_1) - f(x_0)}$
+
+4. Repeat the process, updating the guesses and using the previous two guesses to calculate the next guess, until a stopping criterion (e.g., tolerance or maximum number of iterations) is met.
+
+### Python Implementation
+
+```py
+def secant(f: Callable[[float], float], x0: float, x1: float, tol: float, max_iter: int = 30) -> Tuple[float, List[float]]:
+    """
+    Finds the root of a continuous function f using the Secant method.
+
+    :param f: The continuous function for which to find the root.
+    :param x0: The first initial guess.
+    :param x1: The second initial guess.
+    :param tol: The tolerance for stopping the iterations.
+    :param max_iter: The maximum number of iterations (default: 30).
+    :return: A tuple containing the root and a list of intermediate values.
+    """
+
+    # Initialize variables
+    n = 0
+    history = []
+
+    # Iterate until tolerance is met or maximum iterations are reached
+    while abs(x1 - x0) > tol and n < max_iter:
+        x2 = x1 - f(x1) * (x1 - x0) / (f(x1) - f(x0))
+        history.append(x2)
+        x0, x1 = x1, x2
+        n += 1
+
+    return x1, history
+```
+
+## Convergence of Secant Method
+
+The convergence of the Secant method depends on the function and the initial guesses. Under certain conditions, the Secant method exhibits superlinear convergence, converging faster than linear methods like the Bisection method but slower than quadratic methods like Newton's method. The order of convergence of the Secant method is approximately 1.618 (the golden ratio), making it a relatively efficient root-finding technique.
+
+## Advantages and Disadvantages
+
+### Advantages
+
+1. No derivative required: The Secant method does not require the calculation of the function's derivative, making it suitable for functions where the derivative is difficult to obtain or computationally expensive.
+2. Superlinear convergence: The method converges faster than the Bisection method and is relatively efficient compared to other root-finding techniques.
+3. Simplicity: The Secant method is easy to understand and implement.
+
+### Disadvantages
+
+1. Convergence depends on initial guesses: The Secant method's convergence depends on the choice of initial guesses, and poor initial guesses may result in slow convergence or failure to converge.
+2. No guaranteed convergence: Unlike the Bisection method, the Secant method does not guarantee convergence under specific conditions.
+
+## Real-Life Applications
+
+The Secant method is widely used in various fields such as engineering, physics, and finance for solving equations and optimization problems. Some common applications include:
+
+1. Engineering: Root-finding is essential for solving equations in fluid dynamics, heat transfer, and structural analysis.
+2. Physics: The Secant method can be applied to problems in mechanics, electromagnetism, and quantum mechanics.
+3. Finance: The method is used to find implied volatilities in options pricing models and to solve equations in financial mathematics.
+
+In conclusion, the Secant method is an efficient root-finding technique that offers a good balance between convergence speed and ease of implementation. While it does not guarantee convergence and depends on the initial guesses, its superlinear convergence and applicability to functions without readily available derivatives make it a valuable tool in various fields.
+
+## References
+
+1. [GPT-4](https://openai.com/blog/chatgpt)
+2. [Timothy Sauer - Numerical Analysis, 3rd Edition](https://www.pearson.com/en-us/subject-catalog/p/numerical-analysis/P200000006340?view=educator)
+3. [UIowa - Secant Method](https://homepage.math.uiowa.edu/~whan/3800.d/S3-3.pdf)
+
+export default ({ children }) => (
+  <Layout>
+    <Seo templateTitle='Secant' />
+    <main>
+      <section className=''>
+        <div className='layout'>
+          <Breadcrumbs />
+          <div className='w-c min-h-c prose lg:prose-lg'>{children}</div>
+        </div>
+      </section>
+    </main>
+  </Layout>
+);

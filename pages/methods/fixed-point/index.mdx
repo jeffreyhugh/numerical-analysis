@@ -1,0 +1,109 @@
+import Layout from '@/components/layout/Layout';
+import Seo from '@/components/Seo';
+import toast from 'react-hot-toast';
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs';
+import { Callout } from '@/components/mdx/Callout';
+import { SmallLogo } from '@/components/Logo';
+import { TbAlertTriangle, TbCheck, TbX } from 'react-icons/tb';
+
+# Fixed-Point Iteration
+
+Fixed Point Iteration is a widely-used numerical method for solving equations of the form $f(x) = 0$. It aims to find a fixed point, $x$, of a given function $g(x)$ such that $x = g(x)$. If the function $f(x)$ can be rearranged into the form $x = g(x)$, then Fixed Point Iteration can be used to find an approximation to the root of the equation $f(x) = 0$ by iteratively applying the function $g(x)$ to an initial estimate of the fixed point.
+
+The method is based on the idea that if the function $g(x)$ converges to a fixed point $x$ as the number of iterations increases, then the root of the equation $f(x) = 0$ can be approximated by the fixed point $x$. This convergence property is determined by the behavior of the function $g(x)$ and the choice of the initial estimate.
+
+## Fixed-Point Iteration Algorithm
+
+The Fixed Point Iteration algorithm revolves around the iterative application of a chosen function, $g(x)$, derived from the original function $f(x)$. The method starts with an initial estimate, $x_0$, for the fixed point and generates a sequence of approximations to the fixed point $x$ by evaluating the function $g(x)$ at each approximation.
+
+At each iteration, the algorithm computes the next approximation $x_{n+1}$ by applying the function $g(x)$ to the current approximation $x_n$. This process continues until the difference between consecutive approximations becomes smaller than a predefined tolerance, $TOL$, or a maximum number of iterations, $n_{max}$, is reached.
+
+The sequence of approximations can be expressed mathematically as:
+
+1. Choose an initial approximation, $x_0$.
+2. Compute $x_{n+1} = g(x_n)$ for $n = 0, 1, 2, ...$
+
+### Python Implementation
+
+```py
+def fixed_point_iteration(g: Callable[[float], float], x0: float, tol: float, max_iter: int = 30) -> Tuple[float, List[float]]:
+    """
+    Finds the fixed point of a continuous function g using FPI.
+
+    :param g: The continuous function for which to find the fixed point.
+    :param x0: The initial estimate for the fixed point.
+    :param tol: The tolerance for stopping the iterations.
+    :param max_iter: The maximum number of iterations (default: 30).
+    :return: A tuple containing the fixed point and a list of approximations.
+    """
+
+    # Initialize variables
+    x = x0
+    n = 0
+    history = []
+
+    # Iterate until tolerance is met or maximum iterations are reached
+    while n < max_iter:
+        x_next = g(x)
+        history.append(x_next)
+
+        if abs(x_next - x) < tol:
+            break
+
+        x = x_next
+        n += 1
+
+    return x_next, history
+```
+
+## Convergence of Fixed-Point Iteration
+
+The convergence of Fixed-Point Iteration is not always guaranteed. However, under certain conditions, the method converges to the fixed point. One of the sufficient conditions for convergence is when the function $g$ is a contraction mapping on the interval $[a, b]$ containing the fixed point, which means there exists a constant <br/> $0 < L < 1$ such that for all $x, y$ in the interval, $|g(x) - g(y)| \le L|x - y|$.
+
+When the convergence conditions are met, Fixed-Point Iteration converges linearly, which means that the number of correct digits in the approximation increases with each iteration. The rate of convergence is determined by the Lipschitz constant $L$, with a smaller $L$ leading to faster convergence.
+
+It is important to note that the convergence of Fixed-Point Iteration is sensitive to the choice of the initial estimate $x_0$ and the function $g$. A poor choice of $x_0$ or $g$ may result in slow convergence or divergence.
+
+## Advantages and Disadvantages of Fixed-Point Iteration
+
+### Advantages
+
+1. Simplicity: The Fixed-Point Iteration algorithm is straightforward and easy to implement.
+2. No need for derivatives: The method does not require the calculation of derivatives, making it suitable for functions whose derivatives are difficult to compute or don't exist.
+3. Customizable: The choice of the function $g(x)$ can be adjusted to improve the rate of convergence or to ensure convergence in certain cases.
+
+### Disadvantages
+
+1. Convergence not always guaranteed: Fixed-Point Iteration is not guaranteed to converge to a root for every function or initial estimate. The method's convergence depends on the choice of the function $g(x)$ and the initial estimate $x_0$.
+2. Sensitive to initial estimate: The convergence of Fixed-Point Iteration is sensitive to the choice of the initial estimate $x_0$. A poor choice of $x_0$ may result in slow convergence or divergence.
+3. Linear convergence: Fixed-Point Iteration converges linearly, which is slower than some other root-finding methods like Newton's method or the Secant method that offer a faster rate of convergence.
+
+## Real-life Applications
+
+The Fixed-Point Iteration method is widely used in various fields such as engineering, physics, and finance for solving equations and optimization problems. Some common applications include:
+
+1. Engineering: Fixed-Point Iteration is essential for solving equations in control systems, electrical circuits, and chemical kinetics.
+2. Physics: The method can be applied to problems in thermodynamics, statistical mechanics, and astrophysics.
+3. Finance: Fixed-Point Iteration is used to solve equilibrium problems in economics and for finding solutions in game theory.
+
+In conclusion, Fixed-Point Iteration is a versatile and easy-to-implement technique for finding the roots of a function. While its convergence is not guaranteed for every function or initial estimate, its adaptability and wide applicability make it a valuable tool in many fields.
+
+## References
+
+1. [GPT-4](https://openai.com/blog/chatgpt)
+2. [Timothy Sauer - Numerical Analysis, 3rd Edition](https://www.pearson.com/en-us/subject-catalog/p/numerical-analysis/P200000006340?view=educator)
+3. [UIowa - Fixed Point Iteration](https://homepage.divms.uiowa.edu/~whan/3800.d/S3-4.pdf)
+
+export default ({ children }) => (
+  <Layout>
+    <Seo templateTitle='Fixed-Point' />
+    <main>
+      <section className=''>
+        <div className='layout'>
+          <Breadcrumbs />
+          <div className='w-c min-h-c prose lg:prose-lg'>{children}</div>
+        </div>
+      </section>
+    </main>
+  </Layout>
+);

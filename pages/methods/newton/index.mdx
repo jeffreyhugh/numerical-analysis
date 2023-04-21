@@ -1,0 +1,114 @@
+import Layout from '@/components/layout/Layout';
+import Seo from '@/components/Seo';
+import toast from 'react-hot-toast';
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs';
+import { Callout } from '@/components/mdx/Callout';
+import { SmallLogo } from '@/components/Logo';
+import { TbAlertTriangle, TbCheck, TbX } from 'react-icons/tb';
+
+# Newton's Method
+
+Newton's method, also known as the Newton-Raphson method, is a powerful and widely used numerical technique for finding the roots of real-valued functions. Named after Sir Isaac Newton and Joseph Raphson, this iterative method provides a fast and efficient approach for solving equations and optimization problems in various fields, including engineering, physics, computer science, and finance.
+
+Unlike other root-finding techniques like the Bisection method or the Fixed-Point Iteration method, Newton's method utilizes the first derivative of the function to approximate the root. This approach results in a significantly faster rate of convergence, making it an attractive choice for solving complex problems where speed and accuracy are of utmost importance.
+
+## Newton's Method Algorithm
+
+The Newton-Raphson algorithm is an iterative method that refines an initial guess of the root using the function's value and its first derivative at each step. The algorithm can be summarized as follows:
+
+1. Choose an initial guess $x_0$ for the root of the function $f(x)$.
+2. Compute the tangent line to the curve $f(x)$ at the point $(x_0, f(x_0))$. The slope of this tangent line is given by the first derivative $f'(x_0)$.
+3. Find the point where the tangent line intersects the x-axis, which serves as the next approximation $x_1$ for the root.
+4. Repeat steps 2 and 3 using the new approximation $x_1$ and continue iterating until the difference between consecutive approximations falls below a predefined tolerance or a maximum number of iterations is reached.
+
+Mathematically, the Newton-Raphson algorithm can be defined by the following iterative formula:
+
+$x_{n+1} = x_n - \frac{f(x_n)}{f\'(x_n)}$
+
+where $x_n$ is the current approximation for the root, $f(x_n)$ is the value of the function at $x_n$, and $f'(x_n)$ is the value of the first derivative at $x_n$. The iterations continue until the convergence criteria are met.
+
+### Python Implementation
+
+```py
+def newton(f: Callable[[float], float], df: Callable[[float], float], x0: float, tol: float, max_iter: int = 50) -> Tuple[float, List[float]]:
+    """
+    Finds the root of a function f using Newton's method.
+
+    :param f: The function for which to find the root.
+    :param df: The derivative of the function f.
+    :param x0: The initial guess for the root.
+    :param tol: The tolerance for stopping the iterations.
+    :param max_iter: The maximum number of iterations (default: 50).
+    :return: A tuple containing the root and a list of intermediate approximations.
+    """
+
+    x = x0
+    history = [x0]
+
+    for _ in range(max_iter):
+        x_new = x - f(x) / df(x)
+        history.append(x_new)
+
+        if abs(x_new - x) < tol:
+            break
+
+        x = x_new
+
+    return x_new, history
+```
+
+## Convergence of Newton's Method
+
+The convergence of Newton's method is not guaranteed for all functions and starting points. However, under certain conditions, the method exhibits a rapid, quadratic rate of convergence, which means that the number of correct digits in the approximation roughly doubles with each iteration. The method converges quickly when:
+
+1. The function $f(x)$ is sufficiently smooth and has a continuous second derivative in the neighborhood of the root.
+
+2. The initial guess $x_0$ is sufficiently close to the actual root.
+
+3. The derivative $f'(x)$ is not zero in the neighborhood of the root.
+
+If these conditions are met, Newton's method converges faster than linear methods like the Bisection method. However, there are cases where the method fails to converge, or converges to a root different from the one initially targeted. This can happen when:
+
+1. The function $f(x)$ has multiple roots or complex roots.
+
+2. The initial guess $x_0$ is far from the actual root.
+
+3. The function $f'(x)$ has a root or a discontinuity in the neighborhood of the root.
+
+In some cases, combining Newton's method with another root-finding technique, such as the Bisection method or the Secant method, can improve the chances of convergence and the overall robustness of the algorithm.
+
+## Advantages and Disadvantages of Newton's Method
+
+### Advantages
+
+1. Fast convergence: Newton's method converges quadratically, which is faster than linear convergence methods like the Bisection method.
+2. Fewer iterations: Due to its fast convergence rate, the method generally requires fewer iterations to find a root with a specified accuracy.
+3. Versatile: Newton's method can be adapted to solve systems of nonlinear equations and optimization problems.
+
+### Disadvantages
+
+1. Requires a derivative: The method requires the function's derivative, which may not always be easy to find or computationally expensive to calculate.
+2. Sensitive to initial guess: The method's convergence depends on the initial guess, and a poor choice may lead to slow convergence or divergence.
+3. Not always convergent: Newton's method does not guarantee convergence for all functions or initial guesses, unlike the Bisection method.
+
+In conclusion, Newton's method is a powerful and fast-converging root-finding technique, but it comes with its own set of limitations, such as sensitivity to initial guess and requiring the function's derivative. Despite these drawbacks, when it converges, it often does so much more quickly than other methods, making it an essential tool in many scientific and engineering applications.
+
+## References
+
+1. [GPT-4](https://openai.com/blog/chatgpt)
+2. [Timothy Sauer - Numerical Analysis, 3rd Edition](https://www.pearson.com/en-us/subject-catalog/p/numerical-analysis/P200000006340?view=educator)
+3. [UT Austin - The Idea of Newton's Method](<https://web.ma.utexas.edu/users/m408n/CurrentWeb/LM4-8-2.php#:~:text=Newton's%20method%20is%20a%20technique,a%20new%20(and%20improved!)>)
+
+export default ({ children }) => (
+  <Layout>
+    <Seo templateTitle='Newton' />
+    <main>
+      <section className=''>
+        <div className='layout'>
+          <Breadcrumbs />
+          <div className='w-c min-h-c prose lg:prose-lg'>{children}</div>
+        </div>
+      </section>
+    </main>
+  </Layout>
+);

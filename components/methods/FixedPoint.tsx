@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import * as React from 'react';
 import { toast } from 'react-hot-toast';
 import { TbInfoCircle } from 'react-icons/tb';
@@ -68,12 +69,15 @@ export default function FixedPoint({
 
   return (
     <div className='flex flex-col gap-2'>
-      <p className='text-sm'>
+      <div className='text-sm'>
         An iterative method used for finding the fixed point of a function, FPI
         is equivalent to finding the root of an equation. The method relies on
         rewriting the given function as an equivalent fixed-point problem and
-        iteratively refines the approximation to the fixed point.
-      </p>
+        iteratively refines the approximation to the fixed point.{' '}
+        <Link className='link' href='/methods/fixed-point'>
+          learn more
+        </Link>
+      </div>
       <div className='flex flex-col gap-2'>
         <div className='flex flex-row gap-1'>
           <h4 className='h5'>Required Parameters</h4>

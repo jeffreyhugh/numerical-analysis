@@ -1,0 +1,102 @@
+import Layout from '@/components/layout/Layout';
+import Seo from '@/components/Seo';
+import toast from 'react-hot-toast';
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs';
+import { Callout } from '@/components/mdx/Callout';
+import { SmallLogo } from '@/components/Logo';
+import { TbAlertTriangle, TbCheck, TbX } from 'react-icons/tb';
+
+# Method of False Position
+
+The False Position method, also known as the Regula Falsi method, is a numerical technique used to find the roots of a continuous function. Like the Bisection method, it relies on the Intermediate Value Theorem to ensure the existence of a root within a given interval. However, the False Position method uses a different approach to refine the interval, leading to faster convergence in many cases.
+
+### Intermediate Value Theorem
+
+The Intermediate Value Theorem (IVT) is a fundamental theorem in calculus that states that if a continuous function f(x) is defined on a closed interval [a, b], and k is any value between f(a) and f(b), then there exists at least one point c within the interval [a, b] such that f(c) = k.
+
+#### Mathematically, IVT can be defined as follows:
+
+Let $f$ be a continuous function on the interval $[a, b]$. Then $f$ realizes every value between $f(a)$ and $f(b)$.
+More precisely, if $y$ is a number between $f(a)$ and $f(b)$, then there exists a number $c$ with $a ≤ c ≤ b$ such that
+$f(c) = y$.
+
+## False Position Algorithm
+
+The False Position method starts with an interval [a, b] that contains a root and has opposite function values at the endpoints (i.e., f(a) \* f(b) < 0). The method proceeds iteratively, refining the interval by replacing one of the endpoints with the point of intersection of the secant line connecting the endpoints and the x-axis. The point of intersection is calculated using the formula:
+
+$c = a - \frac{f(a)(b - a)}{f(b) - f(a)}$
+
+The function value at this new point (f(c)) is then evaluated. If f(c) is close enough to zero (within a predefined tolerance), the iteration stops, and c is considered as the root. If not, the interval is updated by replacing either a or b with c, depending on the sign of f(c). The iteration continues until the predefined tolerance is met or a maximum number of iterations is reached.
+
+### Python Implementation
+
+```py
+
+def false_position(f: Callable[[float], float], a: float, b: float, tol: float, max_iter: int = 30) -> Tuple[float, int]:
+    """
+    Finds the root of a continuous function f in the interval [a, b] using the False Position method.
+
+    :param f: The continuous function for which to find the root.
+    :param a: The lower bound of the interval.
+    :param b: The upper bound of the interval.
+    :param tol: The tolerance for stopping the iterations.
+    :param max_iter: The maximum number of iterations (default: 30).
+    :return: A tuple containing the root and the number of iterations.
+    """
+
+    if f(a) * f(b) >= 0:
+        raise ValueError("f(a) and f(b) should have opposite signs")
+
+    n = 0
+    while n < max_iter:
+        c = a - f(a) * (b - a) / (f(b) - f(a))
+        if abs(f(c)) < tol:
+            break
+
+        if f(a) * f(c) < 0:
+            b = c
+        else:
+            a = c
+        n += 1
+
+    return c, n
+```
+
+## Convergence of False Position
+
+The convergence of the False Position method is guaranteed if the function is continuous on the interval [a, b] and f(a) \* f(b) < 0, which ensures that there is a root in the given interval according to the Intermediate Value Theorem. The method generally converges faster than the Bisection method but slower than Newton's method. The rate of convergence for the False Position method is superlinear, lying between linear and quadratic convergence.
+
+## Advantages and Disadvantages
+
+### Advantages
+
+1. Guaranteed convergence: Like the Bisection method, the False Position method is guaranteed to converge to a root under the given conditions, making it a reliable choice for root-finding problems.
+2. Faster than Bisection: The False Position method typically converges faster than the Bisection method due to the use of the secant line to refine the interval.
+3. Does not require derivatives: Unlike Newton's method, the False Position method does not require the computation of derivatives, making it suitable for functions with difficult-to-compute derivatives.
+
+### Disadvantages
+
+1. Slower than Newton's method: The False Position method converges slower than Newton's method, which offers quadratic convergence.
+2. Requires a bracketing interval: Like the Bisection method, the False Position method needs an interval containing the root with opposite function values at the interval's endpoints, which may not always be easy to find.
+
+In conclusion, the False Position method is an effective and reliable technique for finding the roots of a continuous function within a given interval. While it may not be the fastest method available, its guaranteed convergence and faster convergence rate than the Bisection method make it a valuable tool in many fields.
+
+## References
+
+1. [GPT-4](https://openai.com/blog/chatgpt)
+2. [MIT - The Method of False Position](https://web.mit.edu/10.001/Web/Course_Notes/NLAE/node5.html)
+3. [Timothy Sauer - Numerical Analysis, 3rd Edition](https://www.pearson.com/en-us/subject-catalog/p/numerical-analysis/P200000006340?view=educator)
+
+export default ({ children }) => (
+  <Layout>
+    <Seo templateTitle='False-Position' />
+    <main>
+      <section className=''>
+        <div className='layout'>
+          <Breadcrumbs />
+          <div className='w-c min-h-c prose lg:prose-lg'>{children}</div>
+        </div>
+      </section>
+    </main>
+  </Layout>
+);

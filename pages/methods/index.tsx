@@ -1,5 +1,7 @@
 import * as React from 'react';
 
+import clsxm from '@/lib/clsxm';
+
 import { Breadcrumbs } from '@/components/layout/Breadcrumbs';
 import Layout from '@/components/layout/Layout';
 import Bisection, {
@@ -127,7 +129,12 @@ export default function Page() {
                 )}
               </div>
               <div className='flex w-full flex-col items-center justify-center gap-5'>
-                <div className='flex w-full justify-between px-10 max-[1200px]:flex-col max-[1200px]:items-center max-[1200px]:gap-10 '>
+                <div
+                  className={clsxm(
+                    'flex w-full px-10 max-[1200px]:flex-col max-[1200px]:items-center max-[1200px]:gap-10',
+                    iterationData ? 'justify-between' : 'justify-center'
+                  )}
+                >
                   <FunctionKatex functionInput={functionInput} />
                   {iterationData && (
                     <Stat

@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import * as React from 'react';
 import { toast } from 'react-hot-toast';
 import { TbInfoCircle } from 'react-icons/tb';
@@ -84,12 +85,15 @@ export default function FalsePosition({
 
   return (
     <div className='flex flex-col gap-2'>
-      <p className='text-sm'>
+      <div className='text-sm'>
         The False Position Method (Regula Falsi) works by approximating the root
         of a function using the point where the secant line between two points
         intersects the x-axis. The False Position Method maintains a bracketing
-        interval ensuring that the root is always within the interval.
-      </p>
+        interval ensuring that the root is always within the interval.{' '}
+        <Link className='link' href='/methods/false-position'>
+          learn more
+        </Link>
+      </div>
       <div className='flex flex-col gap-2'>
         <div className='flex flex-row gap-1'>
           <h4 className='h5'>Required Parameters</h4>
