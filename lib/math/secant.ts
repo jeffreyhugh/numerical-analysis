@@ -32,14 +32,7 @@ export const secant = async (
   }
   let [fLast, fMiddle] = res;
 
-  const resFinal = await wa_eval(
-    `0x + ${middle} - \\frac{${fMiddle} * (${middle} - ${last})}{${fMiddle} - ${fLast}}`,
-    [0]
-  );
-  if (resFinal.length === 0) {
-    throw 'WolframAlpha API error; check the console';
-  }
-  let [current] = resFinal;
+  let current = middle - (fMiddle * (middle - last)) / (fMiddle - fLast);
   // number of iterations
   let n = 0;
 
@@ -65,7 +58,7 @@ export const secant = async (
     }
     [fLast, fMiddle] = res;
 
-    current = middle + (fMiddle * (middle - last)) / (fMiddle - fLast);
+    current = middle - (fMiddle * (middle - last)) / (fMiddle - fLast);
 
     n += 1;
   }
