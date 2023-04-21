@@ -85,4 +85,4 @@ const bisection_tolerance_ok = (
   b: number,
   n: number,
   tolerance: number
-) => n > 30 || (b - a) / 2 ** (n + 1) < tolerance;
+) => n > 30 || Math.abs(b - a) < tolerance;
