@@ -85,15 +85,56 @@ export default function Page() {
                     graphLoading={graphLoading}
                   />
                 )}
-                {selectedMethod === 'fixed-point' && <FixedPoint />}
-                {selectedMethod === 'newton' && <Newton />}
-                {selectedMethod === 'secant' && <Secant />}
-                {selectedMethod === 'false-position' && <FalsePosition />}
+                {selectedMethod === 'fixed-point' && (
+                  <FixedPoint
+                    tolerance={tolerance}
+                    functionInput={functionInput}
+                    handleGraphData={handleGraphData}
+                    handleGraphLoading={handleGraphLoading}
+                    handleIterationData={handleIterationData}
+                    graphLoading={graphLoading}
+                  />
+                )}
+                {selectedMethod === 'newton' && (
+                  <Newton
+                    tolerance={tolerance}
+                    functionInput={functionInput}
+                    handleGraphData={handleGraphData}
+                    handleGraphLoading={handleGraphLoading}
+                    handleIterationData={handleIterationData}
+                    graphLoading={graphLoading}
+                  />
+                )}
+                {selectedMethod === 'secant' && (
+                  <Secant
+                    tolerance={tolerance}
+                    functionInput={functionInput}
+                    handleGraphData={handleGraphData}
+                    handleGraphLoading={handleGraphLoading}
+                    handleIterationData={handleIterationData}
+                    graphLoading={graphLoading}
+                  />
+                )}
+                {selectedMethod === 'false-position' && (
+                  <FalsePosition
+                    tolerance={tolerance}
+                    functionInput={functionInput}
+                    handleGraphData={handleGraphData}
+                    handleGraphLoading={handleGraphLoading}
+                    handleIterationData={handleIterationData}
+                    graphLoading={graphLoading}
+                  />
+                )}
               </div>
               <div className='flex w-full flex-col items-center justify-center gap-5'>
                 <div className='flex w-full justify-between px-10 max-[1200px]:flex-col'>
                   <FunctionKatex functionInput={functionInput} />
-                  {iterationData && <Stat iterationData={iterationData} />}
+                  {iterationData && (
+                    <Stat
+                      isLoading={graphLoading}
+                      iterationData={iterationData}
+                    />
+                  )}
                 </div>
                 <Graph graphData={graphData} />
               </div>

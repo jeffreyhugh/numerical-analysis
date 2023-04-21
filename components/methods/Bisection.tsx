@@ -2,8 +2,11 @@ import * as React from 'react';
 import { toast } from 'react-hot-toast';
 import { TbInfoCircle } from 'react-icons/tb';
 
+import { bisection, BisectionReturn } from '@/lib/math/bisection';
+
+import CalculateButton from '@/components/methods/utils/CalculateButton';
 import UpperLower from '@/components/methods/utils/UpperLower';
-//graph data is x and y or null
+
 export type graphData = {
   x: number;
   y: number;
@@ -14,8 +17,6 @@ export type iterationData = {
   root: number;
 };
 
-import clsxm from '@/lib/clsxm';
-import { bisection, BisectionReturn } from '@/lib/math/bisection';
 export default function Bisection({
   functionInput,
   handleGraphLoading,
@@ -37,11 +38,10 @@ export default function Bisection({
   function transformData(data: BisectionReturn | null) {
     const points: { x: number; y: number }[] = [];
     data?.output.forEach((dataPoint) => {
-      points.push(
-        { x: dataPoint.a, y: dataPoint.f_a },
-        { x: dataPoint.b, y: dataPoint.f_b },
-        { x: dataPoint.c, y: dataPoint.f_c }
-      );
+      points.push({
+        x: parseFloat(dataPoint.c.toPrecision(6)),
+        y: parseFloat(dataPoint.f_c.toPrecision(6)),
+      });
     });
     return points;
   }
@@ -114,13 +114,10 @@ export default function Bisection({
           setUpperBound={setUpperBound}
         />
       </div>
-      <button
-        className={clsxm('btn-primary btn', isLoading && 'loading')}
-        disabled={isLoading}
-        onClick={handleCalculate}
-      >
-        Calculate
-      </button>
+      <CalculateButton
+        handleCalculate={handleCalculate}
+        isLoading={isLoading}
+      />
     </div>
   );
 }

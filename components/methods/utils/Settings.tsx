@@ -12,7 +12,7 @@ export default function Settings({
       </label>
       <ul
         tabIndex={0}
-        className='dropdown-content menu rounded-box w-52 bg-base-100 p-2 shadow'
+        className='dropdown-content rounded-box w-52 bg-base-100 p-2 shadow'
       >
         <li>
           <div className='form-control w-full max-w-xs'>
@@ -21,7 +21,7 @@ export default function Settings({
             </label>
             <input
               type='text'
-              placeholder='0.0001'
+              defaultValue={0.0001}
               className='input-bordered input w-full max-w-xs'
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                 handleTolerance(parseFloat(e.target.value))

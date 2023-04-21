@@ -1,0 +1,124 @@
+import Layout from '@/components/layout/Layout';
+import Seo from '@/components/Seo';
+import toast from 'react-hot-toast';
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs';
+import { Callout } from '@/components/mdx/Callout';
+import { SmallLogo } from '@/components/Logo';
+import { TbAlertTriangle, TbCheck, TbX } from 'react-icons/tb';
+
+# The Bisection Method
+
+The Bisection method is a popular and straightforward numerical technique for finding the roots of
+a continuous function within a given interval.
+Based on the Intermediate Value Theorem, this iterative method guarantees convergence to a root
+under specific conditions, making it a reliable and robust choice for root-finding problems.
+
+### Intermediate Value Theorem
+
+The Intermediate Value Theorem (IVT) is a fundamental theorem in calculus that states that if a continuous function f(x) is defined on a closed interval [a, b], and k is any value between f(a) and f(b), then there exists at least one point c within the interval [a, b] such that f(c) = k.
+
+#### Mathematically, IVT can be defined as follows:
+
+Let $f$ be a continuous function on the interval $[a, b]$. Then $f$ realizes every value between $f(a)$ and $f(b)$.
+More precisely, if $y$ is a number between $f(a)$ and $f(b)$, then there exists a number $c$ with $a ≤ c ≤ b$ such that
+$f(c) = y$.
+
+## Bisection Algorithm
+
+The Bisection algorithm involves repeatedly dividing an interval containing a root into two equal subintervals
+and selecting the subinterval where the function changes sign as the new interval.
+
+This process continues until the width of the interval becomes smaller than a predefined tolerance $'TOL'$ or a maximum number of iterations $'n'$ is reached.
+
+### Python Implementation
+
+```py
+def bisection(f: Callable[[float], float], a: float, b: float, tol: float, max_iter: int = 30) -> Tuple[float, List[Tuple[float, float, float]]]:
+    """
+    Finds the root of a continuous function f in the interval [a, b].
+
+    :param f: The continuous function for which to find the root.
+    :param a: The lower bound of the interval.
+    :param b: The upper bound of the interval.
+    :param tol: The tolerance for stopping the iterations.
+    :param max_iter: The maximum number of iterations (default: 30).
+    :return: A tuple containing the root and a list of intermediate values (a, b, c).
+    """
+
+    # Ensure that f(a) * f(b) < 0 (i.e., there's a root in the interval)
+    if f(a) * f(b) >= 0:
+        raise ValueError("f(a) and f(b) should have opposite signs")
+
+    # Initialize variables
+    c = (a + b) / 2
+    n = 0
+    history = []
+
+    # Iterate until tolerance is met or maximum iterations are reached
+    while (b - a) / 2 > tol and n < max_iter:
+        c = (a + b) / 2
+        history.append((a, b, c))
+
+        if f(c) == 0:
+            break
+        elif f(a) * f(c) < 0:
+            b = c
+        else:
+            a = c
+        n += 1
+
+    return c, history
+```
+
+While the Bisection method may not be the fastest root-finding technique, its simplicity, ease of
+implementation, and guaranteed convergence make it a widely used and essential tool in
+various fields such as engineering, physics, and finance.
+
+## Convergence of the Bisection Method
+
+The Bisection method is guaranteed to converge to a root under specific conditions. The method converges if the function $f$ is continuous on the interval $[a, b]$ and <br />
+$f(a) * f(b) < 0$, which ensures that there is a root in the given interval according to the Intermediate Value Theorem.
+
+The Bisection method has a linear rate of convergence, which means that the number of correct digits in the approximation doubles with each iteration.
+
+## Advantages and Disadvantages of the Bisection Method
+
+### Advantages
+
+1. Guaranteed convergence: The Bisection method is guaranteed to converge to a root under the given conditions, making it a reliable choice for root-finding problems.
+2. Simplicity: The algorithm is easy to understand and implement.
+3. Robustness: The method is relatively unaffected by the presence of noise in the function or its derivatives, making it suitable for a wide range of applications.
+
+### Disadvantages
+
+1. Slow convergence: The Bisection method converges linearly, which is slower than some other root-finding methods like Newton's method or the Secant method that offer a faster rate of convergence.
+2. Requires a bracketing interval: The method needs an interval containing the root with opposite function values at the interval's endpoints, which may not always be easy to find.
+
+## Real-life Applications
+
+The Bisection method is widely used in various fields such as engineering, physics, and finance for solving equations and optimization problems. Some common applications include:
+
+1. Engineering: Root-finding is essential for solving equations in fluid dynamics, heat transfer, and structural analysis.
+2. Physics: The Bisection method can be applied to problems in mechanics, electromagnetism, and quantum mechanics.
+3. Finance: The method is used to find implied volatilities in options pricing models and to solve equations in financial mathematics.
+
+In conclusion, the Bisection method is a simple, reliable, and robust technique for finding the roots of a continuous function within a given interval. While it may not be the fastest method available, its guaranteed convergence and wide applicability make it a valuable tool in many fields.
+
+## References
+
+1. [X-Engineer - Bisection method for root finding](https://x-engineer.org/bisection-method/)
+2. [Timothy Sauer - Numerical Analysis, 3rd Analysis](https://www.pearson.com/en-us/subject-catalog/p/numerical-analysis/P200000006340?view=educator)
+
+export default ({ children }) => (
+  <Layout>
+    <Seo templateTitle='Bisection' />
+    <main>
+      <section className=''>
+        <div className='layout'>
+          <Breadcrumbs />
+          <div className='w-c min-h-c prose lg:prose-lg'>{children}</div>
+        </div>
+      </section>
+    </main>
+  </Layout>
+);

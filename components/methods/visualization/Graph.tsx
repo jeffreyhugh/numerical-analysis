@@ -13,16 +13,12 @@ import { graphData } from '@/components/methods/Bisection';
 
 const data = [
   {
+    x: 0,
+    y: 1,
+  },
+  {
     x: 1,
-    y: 1.52441,
-  },
-  {
-    x: 1.25,
-    y: 0.382515,
-  },
-  {
-    x: 1.5,
-    y: -5.27211,
+    y: 1,
   },
 ];
 
