@@ -31,6 +31,16 @@ export const bisection = async (
   // number of iterations
   let n = 0;
 
+  let res = await wa_eval(f, [a, b]);
+  if (res.length === 0) {
+    throw 'WolframAlpha API error; check the console';
+  }
+
+  const [ivt_a, ivt_b] = res;
+  if (ivt_a * ivt_b > 0) {
+    throw 'IVT does not apply on this range';
+  }
+
   const outputData = [] as BisectionReturn['output'];
 
   while (!bisection_tolerance_ok(a, b, n, tolerance)) {
@@ -40,7 +50,7 @@ export const bisection = async (
 
     c = (a + b) / 2;
 
-    const res = await wa_eval(f, [a, b, c]);
+    res = await wa_eval(f, [a, b, c]);
     if (res.length === 0) {
       throw 'WolframAlpha API error; check the console';
     }
@@ -49,10 +59,8 @@ export const bisection = async (
 
     if (f_a * f_c < 0) {
       b = c;
-    } else if (f_b * f_c < 0) {
-      a = c;
     } else {
-      throw 'IVT does not apply on this range';
+      a = c;
     }
 
     outputData.push({
@@ -85,4 +93,4 @@ const bisection_tolerance_ok = (
   b: number,
   n: number,
   tolerance: number
-) => n > 30 || Math.abs(b - a) < tolerance;
+) => n > 30 || (b - a) / 2 ** (n + 1) < tolerance;
