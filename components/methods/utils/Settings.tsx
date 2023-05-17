@@ -6,7 +6,7 @@ export default function Settings({
   handleTolerance: (tolerance: number) => void;
 }) {
   return (
-    <div className='dropdown dropdown-end'>
+    <div className='dropdown-end dropdown'>
       <label tabIndex={0} className='btn-primary btn'>
         <TbSettings />
       </label>

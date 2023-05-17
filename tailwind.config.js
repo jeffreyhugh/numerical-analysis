@@ -15,10 +15,10 @@ module.exports = {
       },
       colors: {
         dark: {
-          100: '#0c1110',
+          100: '#2A1E38',
         },
         light: {
-          100: '#cae2db',
+          100: '#c5bfe3',
         },
       },
       keyframes: {
